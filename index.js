@@ -47,7 +47,8 @@ NodeP4.prototype.change = function (options, callback) {
   execP4('change', options, function (err, stdout) {
     if (err) return callback(err);
     var matched = stdout.match(/([0-9]+)/g);
-    return callback(null, (matched || [])[0]);
+    if (matched.length > 0) return callback(null, parseInt(matched[0], 10));
+    else return callback();
   });
 };
 
