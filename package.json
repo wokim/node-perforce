@@ -1,0 +1,25 @@
+{
+  "name": "node-perforce",
+  "version": "0.0.1",
+  "description": "A simple library for perforce",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wokim/node-perforce"
+  },
+  "keywords": [
+    "perforce",
+    "p4",
+    "node-perforce",
+    "node-p4"
+  ],
+  "author": "wokim <wonshikkim.kr@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wokim/node-perforce/issues"
+  },
+  "homepage": "https://github.com/wokim/node-perforce"
+}
