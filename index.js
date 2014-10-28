@@ -4,7 +4,7 @@ var exec = require('child_process').exec;
 var p4options = require('./p4options');
 
 function optionBuilder(options) {
-  if (!options) return '';
+  options = options || {};
 
   var results = {stdin: [], args: [], files: []};
   Object.keys(options).map(function (option) {
