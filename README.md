@@ -6,7 +6,7 @@ A simple library for perforce
 ## Install
 
 ```sh
-npm install node-perforce --save-dev
+npm install node-perforce --save
 ```
 
 ## Example
