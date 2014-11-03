@@ -14,14 +14,25 @@ npm install node-perforce --save
 ```js
 var p4 = require('node-perforce');
 
-// create new changelist
-p4.change({change:'new', description: 'hello world'}, function(err, changelist) {
+// create a new changelist
+p4.changelist.create({description: 'hello world'}, function (err, changelist) {
   if (err) return console.log(err);
   console.log('changelist:', changelist);
 });
 
+// view changelist info
+p4.changelist.view({changelist: changelist}, function (err, view) {
+  if (err) return console.log(err);
+  console.log(view);
+});
+
+// edit changelist 1234
+p4.changelist.edit({changelist: 1234, description: 'hi world'}, function (err) {
+  if (err) return console.log(err);
+});
+
 // delete changelist 1234
-p4.change({delete: 1234}, function(err) {
+p4.changelist.delete({changelist: 1234}, function (err) {
   if (err) return console.log(err);
 });
 

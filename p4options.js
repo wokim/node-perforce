@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-  change: {
+  _change: {
     cmd: 'Change:',
     type: String,
     category: 'stdin'
@@ -21,8 +21,13 @@ module.exports = {
     type: String,
     category: 'mixed'
   },
-  delete: {
+  _delete: {
     cmd: '-d',
+    type: Number,
+    category: 'mixed'
+  },
+  _output: {
+    cmd: '-o',
     type: Number,
     category: 'mixed'
   },

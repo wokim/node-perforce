@@ -1,6 +1,6 @@
 {
   "name": "node-perforce",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A simple library for perforce",
   "main": "index.js",
   "scripts": {
@@ -21,5 +21,12 @@
   "bugs": {
     "url": "https://github.com/wokim/node-perforce/issues"
   },
-  "homepage": "https://github.com/wokim/node-perforce"
+  "homepage": "https://github.com/wokim/node-perforce",
+  "dependencies": {
+    "string": "^2.2.0"
+  },
+  "devDependencies": {
+    "mocha": "^2.0.1",
+    "should": "^4.1.0"
+  }
 }
