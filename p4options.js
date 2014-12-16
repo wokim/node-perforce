@@ -35,6 +35,10 @@ module.exports = {
     cmd: '-f',
     category: 'unary'
   },
+  unchanged: {
+    cmd: '-a',
+    category: 'unary'
+  },
   files: {
     type: Array,
     category: 'mixed'
