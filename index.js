@@ -12,8 +12,9 @@ function optionBuilder(options) {
   Object.keys(options).map(function (option) {
     var p4option = p4options[option];
     if (!p4option) return;
-    if ((options[option] || {}).constructor !== p4option.type) return;
-
+    if (p4option.category !== 'unary') {
+      if ((options[option] || {}).constructor !== p4option.type) return;
+    }
     if (p4option.category === 'stdin') {
       results.stdin.push(p4option.cmd + options[option]);
       if (results.args.indexOf('-i') < 0) results.args.push('-i');
