@@ -42,5 +42,10 @@ module.exports = {
   files: {
     type: Array,
     category: 'mixed'
+  },
+  max: {
+    cmd: '-m',
+    type: Number,
+    category: 'mixed'
   }
 };
