@@ -136,7 +136,7 @@ NodeP4.prototype.info = function (callback) {
   });
 };
 
-var commonCommands = ['add', 'delete', 'edit', 'revert'];
+var commonCommands = ['add', 'delete', 'edit', 'revert', 'sync', 'diff'];
 commonCommands.forEach(function (command) {
   NodeP4.prototype[command] = function (options, callback) {
     execP4(command, options, callback);
