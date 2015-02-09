@@ -5,6 +5,7 @@ var os = require('os');
 var exec = require('child_process').exec;
 var p4options = require('./p4options');
 
+// build a list of options/arguments for the p4 command
 function optionBuilder(options) {
   options = options || {};
 
@@ -28,6 +29,31 @@ function optionBuilder(options) {
   return results;
 }
 
+// filter passed-in options to get a hash of child process options
+// (i.e., not p4 command arguments)
+function execOptionBuilder(options) {
+  var validKeys = {
+    cwd:        true,
+    env:        true,
+    encoding:   true,
+    shell:      true,
+    timeout:    true,
+    maxBuffer:  true,
+    killSignal: true,
+    uid:        true,
+    gid:        true
+  };
+
+  options = options || {};
+
+  return Object.keys(options).reduce(function(result, key) {
+    if(validKeys[key]) {
+      result[key] = options[key];
+    }
+    return result;
+  }, options);
+}
+
 function execP4(p4cmd, options, callback) {
   if (typeof options === 'function') {
     callback = options;
@@ -35,8 +61,9 @@ function execP4(p4cmd, options, callback) {
   }
 
   var ob = optionBuilder(options);
+  var childProcessOptions = execOptionBuilder(options);
   var cmd = ['p4', p4cmd, ob.args.join(' '), ob.files.join(' ')];
-  var child = exec(cmd.join(' '), function (err, stdout, stderr) {
+  var child = exec(cmd.join(' '), childProcessOptions, function (err, stdout, stderr) {
     if (err) return callback(err);
     if (stderr) return callback(new Error(stderr));
     return callback(null, stdout);
@@ -121,8 +148,12 @@ NodeP4.prototype.changelist = {
   }
 };
 
-NodeP4.prototype.info = function (callback) {
-  execP4('info', function (err, stdout) {
+NodeP4.prototype.info = function (options, callback) {
+  if(typeof options === 'function') {
+    callback = options;
+    options = undefined;
+  }
+  execP4('info', options, function (err, stdout) {
     if (err) return callback(err);
 
     var result = {};
