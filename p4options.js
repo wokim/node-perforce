@@ -11,9 +11,27 @@ module.exports = {
     type: String,
     category: 'stdin'
   },
+  acceptmerged: {
+    cmd: '-am',
+    category: 'unary'
+  },
+  delete: {
+    cmd: '-d',
+    category: 'unary'
+  },
   changelist: {
     cmd: '-c',
     type: Number,
+    category: 'mixed'
+  },
+  shelved: {
+    cmd: '-s',
+    type: Number,
+    category: 'mixed'
+  },
+  stream: {
+    cmd: '-S',
+    type: String,
     category: 'mixed'
   },
   filetype: {
@@ -33,6 +51,10 @@ module.exports = {
   },
   force: {
     cmd: '-f',
+    category: 'unary'
+  },
+  switch: {
+    cmd: '-s',
     category: 'unary'
   },
   unchanged: {

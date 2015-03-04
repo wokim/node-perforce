@@ -167,7 +167,7 @@ NodeP4.prototype.info = function (options, callback) {
   });
 };
 
-var commonCommands = ['add', 'delete', 'edit', 'revert', 'sync', 'diff', 'reconcile', 'changes'];
+var commonCommands = ['add', 'delete', 'edit', 'revert', 'sync', 'diff', 'reconcile', 'changes', 'reopen', 'shelve', 'unshelve', 'client', 'resolve'];
 commonCommands.forEach(function (command) {
   NodeP4.prototype[command] = function (options, callback) {
     execP4(command, options, callback);
