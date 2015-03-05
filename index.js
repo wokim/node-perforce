@@ -167,6 +167,37 @@ NodeP4.prototype.info = function (options, callback) {
   });
 };
 
+// return an array of file info objects for each file opened in the workspace
+NodeP4.prototype.opened = function (options, callback) {
+  var ztagRegex = /^\.\.\.\s+(\w+)\s+(.+)/;
+  if(typeof options === 'function') {
+    callback = options;
+    options = undefined;
+  }
+  execP4('-ztag opened', options, function (err, stdout) {
+    var result;
+    if (err) return callback(err);
+
+    // process each file
+    result = stdout.trim().split('\n\n').reduce(function(memo, fileinfo) {
+      // process each line of file info, transforming into a hash
+      memo.push(fileinfo.split('\n').reduce(function(memo2, line) {
+        var match, key, value;
+        match = ztagRegex.exec(line);
+        if(match) {
+          key = match[1];
+          value = match[2];
+          memo2[key] = value;
+        }
+        return memo2;
+      }, {}));
+      return memo;
+    }, []);
+
+    callback(null, result);
+  });
+};
+
 var commonCommands = ['add', 'delete', 'edit', 'revert', 'sync', 'diff', 'reconcile', 'changes', 'reopen', 'shelve', 'unshelve', 'client', 'resolve'];
 commonCommands.forEach(function (command) {
   NodeP4.prototype[command] = function (options, callback) {
