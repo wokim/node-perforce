@@ -4,6 +4,7 @@ var S = require('string');
 var os = require('os');
 var exec = require('child_process').exec;
 var p4options = require('./p4options');
+var ztagRegex = /^\.\.\.\s+(\w+)\s+(.+)/;
 
 // build a list of options/arguments for the p4 command
 function optionBuilder(options) {
@@ -74,6 +75,20 @@ function execP4(p4cmd, options, callback) {
     });
     child.stdin.emit('end');
   }
+}
+
+// process group of lines of output from a p4 command executed with -ztag
+function processZtagOutput(output) {
+  return output.split('\n').reduce(function(memo, line) {
+    var match, key, value;
+      match = ztagRegex.exec(line);
+      if(match) {
+        key = match[1];
+        value = match[2];
+        memo[key] = value;
+      }
+      return memo;
+  }, {});
 }
 
 function NodeP4() {}
@@ -169,7 +184,6 @@ NodeP4.prototype.info = function (options, callback) {
 
 // return an array of file info objects for each file opened in the workspace
 NodeP4.prototype.opened = function (options, callback) {
-  var ztagRegex = /^\.\.\.\s+(\w+)\s+(.+)/;
   if(typeof options === 'function') {
     callback = options;
     options = undefined;
@@ -181,22 +195,29 @@ NodeP4.prototype.opened = function (options, callback) {
     // process each file
     result = stdout.trim().split('\n\n').reduce(function(memo, fileinfo) {
       // process each line of file info, transforming into a hash
-      memo.push(fileinfo.split('\n').reduce(function(memo2, line) {
-        var match, key, value;
-        match = ztagRegex.exec(line);
-        if(match) {
-          key = match[1];
-          value = match[2];
-          memo2[key] = value;
-        }
-        return memo2;
-      }, {}));
+      memo.push(processZtagOutput(fileinfo));
       return memo;
     }, []);
 
     callback(null, result);
   });
 };
+
+NodeP4.prototype.fstat = function (options, callback) {
+  if(typeof options === 'function') {
+    callback = options;
+    options = undefined;
+  }
+  execP4('fstat', options, function (err, stdout) {
+    var result;
+    if (err) return callback(err);
+
+    // process file info
+    result = processZtagOutput(stdout);
+
+    callback(null, result);
+  });
+}
 
 var commonCommands = ['add', 'delete', 'edit', 'revert', 'sync', 'diff', 'reconcile', 'changes', 'reopen', 'shelve', 'unshelve', 'client', 'resolve'];
 commonCommands.forEach(function (command) {
