@@ -160,6 +160,12 @@ NodeP4.prototype.changelist = {
       }
       return callback(null, result);
     });
+  },
+  submit: function (options, callback) {
+    if (!options || !options.changelist) return callback(new Error('Missing parameter/argument'));
+    execP4('submit', options, function (err, stdout) {
+      if (err) return callback(err);
+    });
   }
 };
 
@@ -219,7 +225,9 @@ NodeP4.prototype.fstat = function (options, callback) {
   });
 }
 
-var commonCommands = ['add', 'delete', 'edit', 'revert', 'sync', 'diff', 'reconcile', 'changes', 'reopen', 'shelve', 'unshelve', 'client', 'resolve'];
+var commonCommands = ['add', 'delete', 'edit', 'revert', 'sync',
+                      'diff', 'reconcile', 'changes', 'reopen',
+                      'shelve', 'unshelve', 'client', 'resolve', 'submit'];
 commonCommands.forEach(function (command) {
   NodeP4.prototype[command] = function (options, callback) {
     execP4(command, options, callback);
