@@ -226,7 +226,7 @@ NodeP4.prototype.fstat = function (options, callback) {
 }
 
 var commonCommands = ['add', 'delete', 'edit', 'revert', 'sync',
-                      'diff', 'reconcile', 'changes', 'reopen',
+                      'diff', 'reconcile', 'changes', 'reopen', 'resolved',
                       'shelve', 'unshelve', 'client', 'resolve', 'submit'];
 commonCommands.forEach(function (command) {
   NodeP4.prototype[command] = function (options, callback) {
