@@ -1,6 +1,6 @@
 {
   "name": "node-perforce",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "A simple library for perforce",
   "main": "index.js",
   "scripts": {
