@@ -52,7 +52,7 @@ function execOptionBuilder(options) {
       result[key] = options[key];
     }
     return result;
-  }, options);
+  }, {});
 }
 
 function execP4(p4cmd, options, callback) {
