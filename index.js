@@ -199,7 +199,7 @@ NodeP4.prototype.opened = function (options, callback) {
     if (err) return callback(err);
 
     // process each file
-    result = stdout.trim().split('\n\n').reduce(function(memo, fileinfo) {
+    result = stdout.trim().split(/\r\n\r\n|\n\n/).reduce(function(memo, fileinfo) {
       // process each line of file info, transforming into a hash
       memo.push(processZtagOutput(fileinfo));
       return memo;
