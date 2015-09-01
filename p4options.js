@@ -69,5 +69,37 @@ module.exports = {
     cmd: '-m',
     type: Number,
     category: 'mixed'
+  },
+  client: {
+    cmd: '-c',
+    type: String,
+    category: 'mixed'
+  },
+  long: {
+    cmd: '-l',
+    category: 'unary'
+  },
+  trunk: {
+    cmd: '-L',
+    category: 'unary'
+  },
+  status: {
+    cmd: '-s',
+    type: String,
+    category: 'mixed'
+  },
+  time: {
+    cmd: '-t',
+    category: 'unary'
+  },
+  user: {
+    cmd: '-u',
+    type: String,
+    category: 'mixed'
+  },
+  custom: {
+    cmd: ' ',
+    type: String,
+    category: 'mixed'
   }
 };
