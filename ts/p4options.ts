@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = {
+export default {
   _change: {
     cmd: 'Change:',
     type: String,
@@ -8,6 +8,11 @@ module.exports = {
   },
   description: {
     cmd: 'Description:',
+    type: String,
+    category: 'stdin'
+  },
+  stdin: {
+    cmd: '',
     type: String,
     category: 'stdin'
   },

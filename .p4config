@@ -1,0 +1,4 @@
+P4PORT=ssl:192.168.99.100:1666
+P4USER=p4admin
+P4PASSWD=pass12349ers!
+P4CLIENT=node-perforce
