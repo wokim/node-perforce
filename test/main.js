@@ -1,6 +1,6 @@
 'use strict';
 
-var p4 = require('../');
+var p4 = require('../dist');
 var should = require('should');
 var assert = require('assert');
 var path = require('path');
