@@ -4,6 +4,7 @@ import * as S from 'string';
 import * as os from 'os';
 import * as child_process from 'child_process';
 import * as Promise from 'bluebird';
+import * as _ from 'lodash';
 
 import p4options from './p4options';
 
@@ -110,19 +111,22 @@ function _reject(callback) {
 }
 
 
-interface ViewOutput {
-  files?: string;
-}
 interface ViewResultFile {
   file: string;
   action: string;
 }
 interface ViewResult {
-  files: ViewResultFile[];
+  change?: string;
+  date?: string;
+  client?: string;
+  user?: string;
+  status?: string;
+  description?: string;
+  files?: ViewResultFile[];
 }
 
 
-class Changelist {
+export class Changelist {
   public create(options?, callback?) {
     if (typeof options === 'function') {
       callback = options;
@@ -173,7 +177,7 @@ class Changelist {
         return '@@@' + match.substring(3);
       });
 
-      let output: ViewOutput = {};
+      let output: any = {};
       let lines = stdout.replace(/#(.)*\n/g, '').split(os.EOL + os.EOL);
       lines.forEach((line) => {
         let key = S(line.split(':')[0].toLowerCase()).trim().camelize().s;
@@ -183,6 +187,7 @@ class Changelist {
       });
 
       let result: ViewResult = { files: [] };
+      _.assign(result, output);
       if (output.files) {
         result.files = output.files.split('\n').map(function (file) {
           let fileAndAction = file.replace(/\t*/g, '').split('@@@');
@@ -201,7 +206,7 @@ class Changelist {
   }
 }
 
-export default class NodeP4 {
+export class NodeP4 {
   changelist = new Changelist();
   
   // process group of lines of output from a p4 command executed with -ztag
@@ -263,6 +268,10 @@ export default class NodeP4 {
 
 
   private exec(command, options, callback?) {
+    if (typeof options === 'function') {
+      callback = options;
+      options = undefined;
+    }
     return execP4(command, options).then(_resolve(callback), _reject(callback));
   }
   public add(options, callback?) {
@@ -301,6 +310,29 @@ export default class NodeP4 {
   public unshelve(options, callback?) {
     return this.exec('unshelve', options, callback);
   }
+
+
+  public clients(options, callback?) {
+    if (typeof options === 'function') {
+      callback = options;
+      options = undefined;
+    }
+    return execP4('clients', options).then(stdout => {
+      let lines = stdout.split(os.EOL);
+      let clients = lines.map(line => {
+        let token = line.split(' ');
+        return {
+          client: token[1],
+          access: token[2],
+          root: token[4],
+          description: token.slice(5).join(' ')
+        };
+      });
+      return clients.filter(client => !!client.client);
+    }).then(_resolve(callback), _reject(callback));
+  }
+
+
   public client(options, callback?) {
     return this.exec('client', options, callback);
   }
@@ -311,3 +343,6 @@ export default class NodeP4 {
     return this.exec('submit', options, callback);
   }
 }
+
+let p4 = new NodeP4();
+export default p4;

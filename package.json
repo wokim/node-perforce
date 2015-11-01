@@ -1,10 +1,11 @@
 {
   "name": "node-perforce",
-  "version": "0.1.0",
+  "version": "0.0.17",
   "description": "A simple library for perforce",
   "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
   "scripts": {
-    "test": "mocha",
+    "test": "npm run build && mocha",
     "build": "tsc -p .",
     "prepublish": "npm run build"
   },
@@ -26,6 +27,7 @@
   "homepage": "https://github.com/wokim/node-perforce",
   "dependencies": {
     "bluebird": "^3.0.2",
+    "lodash": "^3.10.1",
     "string": "^2.2.0"
   },
   "devDependencies": {

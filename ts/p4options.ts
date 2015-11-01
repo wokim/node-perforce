@@ -11,6 +11,11 @@ export default {
     type: String,
     category: 'stdin'
   },
+  stdin: {
+    cmd: '',
+    type: String,
+    category: 'stdin'
+  },
   acceptmerged: {
     cmd: '-am',
     category: 'unary'
