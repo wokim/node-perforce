@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = {
+export default {
   _change: {
     cmd: 'Change:',
     type: String,
