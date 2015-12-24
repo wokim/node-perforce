@@ -218,15 +218,39 @@ NodeP4.prototype.fstat = function (options, callback) {
     var result;
     if (err) return callback(err);
 
-    // process file info
-    result = processZtagOutput(stdout);
+    // process each file fstat info
+    result = stdout.trim().split(/\r\n\r\n|\n\n/).reduce(function(memo, fstatinfo) {
+      // process each line of file info, transforming into a hash
+      memo.push(processZtagOutput(fstatinfo));
+      return memo;
+    }, []);
 
     callback(null, result);
   });
 }
 
+NodeP4.prototype.changes = function (options, callback) {
+  if(typeof options === 'function') {
+    callback = options;
+    options = undefined;
+  }
+  execP4('-ztag changes', options, function (err, stdout) {
+    var result;
+    if (err) return callback(err);
+
+    // process each change
+    result = stdout.trim().split(/\r\n\r\n|\n\n/).reduce(function(memo, changeinfo) {
+      // process each line of change info, transforming into a hash
+      memo.push(processZtagOutput(changeinfo));
+      return memo;
+    }, []);
+
+    callback(null, result);
+  });
+};
+
 var commonCommands = ['add', 'delete', 'edit', 'revert', 'sync',
-                      'diff', 'reconcile', 'changes', 'reopen', 'resolved',
+                      'diff', 'reconcile', 'reopen', 'resolved',
                       'shelve', 'unshelve', 'client', 'resolve', 'submit'];
 commonCommands.forEach(function (command) {
   NodeP4.prototype[command] = function (options, callback) {
