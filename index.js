@@ -239,7 +239,7 @@ NodeP4.prototype.changes = function (options, callback) {
     if (err) return callback(err);
 
     // process each change
-    result = stdout.trim().split(/\r\n\r\n|\n\n/).reduce(function(memo, changeinfo) {
+    result = stdout.trim().split(/\r\n\r\n|\n\n(?=\.\.\.)/).reduce(function(memo, changeinfo) {
       // process each line of change info, transforming into a hash
       memo.push(processZtagOutput(changeinfo));
       return memo;
