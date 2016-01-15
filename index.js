@@ -249,6 +249,22 @@ NodeP4.prototype.changes = function (options, callback) {
   });
 };
 
+NodeP4.prototype.user = function (options, callback) {
+  if(typeof options === 'function') {
+    callback = options;
+    options = undefined;
+  }
+  execP4('-ztag user', options, function (err, stdout) {
+    var result;
+    if (err) return callback(err);
+
+    // process ztagged user information
+    result = processZtagOutput(stdout.trim());
+
+    callback(null, result);
+  });
+};
+
 var commonCommands = ['add', 'delete', 'edit', 'revert', 'sync',
                       'diff', 'reconcile', 'reopen', 'resolved',
                       'shelve', 'unshelve', 'client', 'resolve', 'submit'];

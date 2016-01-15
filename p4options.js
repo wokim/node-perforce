@@ -41,12 +41,12 @@ module.exports = {
   },
   _delete: {
     cmd: '-d',
-    type: Number,
+    type: String,
     category: 'mixed'
   },
   _output: {
     cmd: '-o',
-    type: Number,
+    type: String,
     category: 'mixed'
   },
   force: {
