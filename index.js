@@ -6,6 +6,8 @@ var exec = require('child_process').exec;
 var p4options = require('./p4options');
 var ztagRegex = /^\.\.\.\s+(\w+)\s+(.+)/;
 
+var p4 = process.platform === 'win32'? 'p4.exe' : 'p4';
+
 // build a list of options/arguments for the p4 command
 function optionBuilder(options) {
   options = options || {};
@@ -63,7 +65,7 @@ function execP4(p4cmd, options, callback) {
 
   var ob = optionBuilder(options);
   var childProcessOptions = execOptionBuilder(options);
-  var cmd = ['p4', p4cmd, ob.args.join(' '), ob.files.join(' ')];
+  var cmd = [p4, p4cmd, ob.args.join(' '), ob.files.join(' ')];
   var child = exec(cmd.join(' '), childProcessOptions, function (err, stdout, stderr) {
     if (err) return callback(err);
     if (stderr) return callback(new Error(stderr));
