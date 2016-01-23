@@ -291,8 +291,8 @@ NodeP4.prototype.users = function (options, callback) {
 };
 
 var commonCommands = ['add', 'delete', 'edit', 'revert', 'sync',
-  'diff', 'reconcile', 'reopen', 'resolved',
-  'shelve', 'unshelve', 'client', 'resolve', 'submit'];
+                      'diff', 'reconcile', 'reopen', 'resolved',
+                      'shelve', 'unshelve', 'client', 'resolve', 'submit'];
 commonCommands.forEach(function (command) {
   NodeP4.prototype[command] = function (options, callback) {
     execP4(command, options, callback);
