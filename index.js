@@ -81,13 +81,13 @@ function execP4(p4cmd, options, callback) {
 function processZtagOutput(output) {
   return output.split('\n').reduce(function(memo, line) {
     var match, key, value;
-      match = ztagRegex.exec(line);
-      if(match) {
-        key = match[1];
-        value = match[2];
-        memo[key] = value;
-      }
-      return memo;
+    match = ztagRegex.exec(line);
+    if(match) {
+      key = match[1];
+      value = match[2];
+      memo[key] = value;
+    }
+    return memo;
   }, {});
 }
 
@@ -241,7 +241,12 @@ NodeP4.prototype.changes = function (options, callback) {
     // process each change
     result = stdout.trim().split(/\r\n\r\n|\n\n(?=\.\.\.)/).reduce(function(memo, changeinfo) {
       // process each line of change info, transforming into a hash
-      memo.push(processZtagOutput(changeinfo));
+      var item = processZtagOutput(changeinfo);
+
+      // If object representing change is not empty, push it onto array
+      if (Object.keys(item).length != 0)
+        memo.push(item);
+
       return memo;
     }, []);
 
@@ -286,8 +291,8 @@ NodeP4.prototype.users = function (options, callback) {
 };
 
 var commonCommands = ['add', 'delete', 'edit', 'revert', 'sync',
-                      'diff', 'reconcile', 'reopen', 'resolved',
-                      'shelve', 'unshelve', 'client', 'resolve', 'submit'];
+  'diff', 'reconcile', 'reopen', 'resolved',
+  'shelve', 'unshelve', 'client', 'resolve', 'submit'];
 commonCommands.forEach(function (command) {
   NodeP4.prototype[command] = function (options, callback) {
     execP4(command, options, callback);
