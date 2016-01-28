@@ -61,6 +61,10 @@ module.exports = {
     cmd: '-a',
     category: 'unary'
   },
+  quiet: {
+    cmd: '-q',
+    category: 'unary'
+  },
   files: {
     type: Array,
     category: 'mixed'
