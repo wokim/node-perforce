@@ -65,6 +65,11 @@ module.exports = {
     cmd: '-q',
     category: 'unary'
   },
+  branch: {
+    cmd: '-b',
+    type: String,
+    category: 'mixed'
+  },
   files: {
     type: Array,
     category: 'mixed'
