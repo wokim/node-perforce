@@ -83,13 +83,13 @@ function execP4(p4cmd, options, callback) {
 function processZtagOutput(output) {
   return output.split('\n').reduce(function(memo, line) {
     var match, key, value;
-      match = ztagRegex.exec(line);
-      if(match) {
-        key = match[1];
-        value = match[2];
-        memo[key] = value;
-      }
-      return memo;
+    match = ztagRegex.exec(line);
+    if(match) {
+      key = match[1];
+      value = match[2];
+      memo[key] = value;
+    }
+    return memo;
   }, {});
 }
 
@@ -229,7 +229,7 @@ NodeP4.prototype.fstat = function (options, callback) {
 
     callback(null, result);
   });
-}
+};
 
 NodeP4.prototype.changes = function (options, callback) {
   if(typeof options === 'function') {
@@ -243,7 +243,12 @@ NodeP4.prototype.changes = function (options, callback) {
     // process each change
     result = stdout.trim().split(/\r\n\r\n|\n\n(?=\.\.\.)/).reduce(function(memo, changeinfo) {
       // process each line of change info, transforming into a hash
-      memo.push(processZtagOutput(changeinfo));
+      var item = processZtagOutput(changeinfo);
+
+      // If object representing change is not empty, push it onto array
+      if (Object.keys(item).length != 0)
+        memo.push(item);
+
       return memo;
     }, []);
 
@@ -280,6 +285,31 @@ NodeP4.prototype.users = function (options, callback) {
     result = stdout.trim().split(/\r\n\r\n|\n\n(?=\.\.\.)/).reduce(function(memo, userinfo) {
       // process each line of user info, transforming into a hash
       memo.push(processZtagOutput(userinfo));
+      return memo;
+    }, []);
+
+    callback(null, result);
+  });
+};
+
+NodeP4.prototype.diff2 = function (options, callback) {
+  if(typeof options === 'function') {
+    callback = options;
+    options = undefined;
+  }
+  execP4('-ztag diff2', options, function (err, stdout) { // TODO: Check that no more than two file arguments are provided
+    var result;
+    if (err) return callback(err);
+
+    // process each change
+    result = stdout.trim().split(/\r\n\r\n|\n\n(?=\.\.\.)/).reduce(function(memo, diff2info) {
+      // process each line of change info, transforming into a hash
+      var item = processZtagOutput(diff2info);
+
+      // If object representing change is not empty, push it onto array
+      if (Object.keys(item).length != 0)
+        memo.push(item);
+
       return memo;
     }, []);
 
