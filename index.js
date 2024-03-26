@@ -319,7 +319,8 @@ NodeP4.prototype.diff2 = function (options, callback) {
 
 var commonCommands = ['add', 'delete', 'edit', 'revert', 'sync',
                       'diff', 'reconcile', 'reopen', 'resolved',
-                      'shelve', 'unshelve', 'client', 'resolve', 'submit'];
+                      'shelve', 'unshelve', 'client', 'resolve',
+                      'submit', 'describe', 'files'];
 commonCommands.forEach(function (command) {
   NodeP4.prototype[command] = function (options, callback) {
     execP4(command, options, callback);
